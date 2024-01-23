@@ -1,10 +1,7 @@
-export type FormValues = {
+export type FiledValues = {
   Email: string;
   Password: string;
+  ConfirmEmail?: string;
+  ConfirmPassword?: string;
+  Name?: string;
 };
-
-export interface RegisterFormValues extends FormValues {
-  ConfirmEmail: string;
-  ConfirmPassword: string;
-  Name: string;
-}
