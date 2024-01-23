@@ -6,19 +6,15 @@ import {
   TextInputProps,
   View,
 } from "react-native";
+
 import { Colors } from "../../utils/Colors";
-import {
-  Control,
-  Controller,
-  UseControllerProps,
-  useController,
-} from "react-hook-form";
-import { FormValues } from "../../types/Login";
+import { Control, Controller } from "react-hook-form";
+import { FiledValues } from "../../types/Login";
 
 interface Props extends TextInputProps {
   label: string;
-  name: keyof FormValues;
-  control: Control<FormValues>;
+  name: keyof FiledValues;
+  control: Control<FiledValues>;
   error?: string;
   requiredMessage?: string;
   regex?: RegExp;
