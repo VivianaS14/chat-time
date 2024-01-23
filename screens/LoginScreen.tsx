@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomInput from "../components/ui/CustomInput";
 import CustomButton from "../components/ui/CustomButton";
@@ -8,6 +8,9 @@ import { RootParamList } from "../types/Navigation";
 import { useForm } from "react-hook-form";
 import { FiledValues } from "../types/Login";
 import { validatePassword } from "../utils/fn";
+import { api, apiUrls } from "../utils/apiUrls";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
 
 type Props = NativeStackScreenProps<RootParamList, "Login">;
 
@@ -20,10 +23,10 @@ function LoginScreen({ navigation }: Props) {
   } = useForm<FiledValues>({ mode: "onChange" });
 
   const onSignUp = () => {
-    navigation.navigate("Register");
+    navigation.replace("Register");
   };
 
-  const onSubmit = (data: FiledValues) => {
+  const onSubmit = async (data: FiledValues) => {
     if (!validatePassword(data.Password)) {
       setError("Password", {
         message:
@@ -32,8 +35,39 @@ function LoginScreen({ navigation }: Props) {
       return;
     }
 
-    console.log("----------> Submitted Data: ", { data });
+    const user = {
+      email: data.Email,
+      password: data.Password,
+    };
+
+    try {
+      const { data } = await api.post(apiUrls.login, user);
+      const token = data.token;
+
+      AsyncStorage.setItem("authToken", token);
+      navigation.replace("Home");
+    } catch (error) {
+      Alert.alert("Login failed", "Email or Password invalid");
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+
+        if (token) {
+          navigation.replace("Home");
+          return;
+        }
+      } catch (error) {
+        console.log("Error", error);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
 
   return (
     <SafeAreaView style={style.mainContainer}>
