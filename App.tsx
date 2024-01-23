@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import { RootParamList } from "./types/Navigation";
+import HomeScreen from "./screens/HomeScreen";
 
 const Stack = createNativeStackNavigator<RootParamList>();
 
@@ -17,6 +18,7 @@ function StackNavigator() {
     >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} />
     </Stack.Navigator>
   );
 }
