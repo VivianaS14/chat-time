@@ -65,19 +65,17 @@ function RegisterScreen({ navigation }: Props) {
       password: data.Password,
     };
 
-    api
-      .post(apiUrls.register, user)
-      .then((response) => {
-        Alert.alert(
-          "Registration successful",
-          "You have been registered successfully"
-        );
-        console.log({ response });
-      })
-      .catch((err) => {
-        Alert.alert("Registration failed", "An error occurred");
-        console.log(err);
-      });
+    try {
+      const response = await api.post(apiUrls.register, user);
+      Alert.alert(
+        "Registration successful",
+        "You have been registered successfully"
+      );
+      console.log({ response });
+    } catch (error) {
+      Alert.alert("Registration failed", "An error occurred");
+      console.log(error);
+    }
   };
 
   return (
