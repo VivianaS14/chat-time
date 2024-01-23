@@ -8,4 +8,5 @@ export const api = axios.create({
 
 export const apiUrls = {
   register: "/register",
+  login: "/login",
 };
