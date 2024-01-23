@@ -1,16 +1,62 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomInput from "../components/ui/CustomInput";
 import CustomButton from "../components/ui/CustomButton";
 import { Colors } from "../utils/Colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootParamList } from "../types/Navigation";
+import { useForm } from "react-hook-form";
+import { FiledValues } from "../types/Login";
+import { validatePassword } from "../utils/fn";
 
 type Props = NativeStackScreenProps<RootParamList, "Register">;
 
 function RegisterScreen({ navigation }: Props) {
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<FiledValues>({ mode: "onChange" });
+
   const onSignIn = () => {
     navigation.navigate("Login");
+  };
+
+  const onSubmit = (data: FiledValues) => {
+    if (data.Email !== data.ConfirmEmail) {
+      setError("Email", {
+        message: "Your email and confirmation email must match",
+      });
+      setError("ConfirmEmail", {
+        message: "Your email and confirmation email must match",
+      });
+      return;
+    }
+
+    if (data.Password !== data.ConfirmPassword) {
+      setError("Password", {
+        message: "Your password and confirmation password must match",
+      });
+      setError("ConfirmPassword", {
+        message: "Your password and confirmation password must match",
+      });
+      return;
+    }
+
+    if (!validatePassword(data.Password)) {
+      setError("Password", {
+        message:
+          "Password must contain at least one number, one uppercase and one lowercase letter",
+      });
+      setError("ConfirmPassword", {
+        message:
+          "Password must contain at least one number, one uppercase and one lowercase letter",
+      });
+      return;
+    }
+
+    console.log("----------> Submitted Data: ", { data });
   };
 
   return (
@@ -28,14 +74,49 @@ function RegisterScreen({ navigation }: Props) {
           <Text style={style.text}>Register to your Account</Text>
         </View>
         <View style={style.formContainer}>
-          <CustomInput name="Name" />
-          <CustomInput name="Email" />
-          <CustomInput name="Confirm Email" />
-          <CustomInput name="Password" />
-          <CustomInput name="Confirm Password" />
+          <CustomInput
+            label="Name"
+            name="Name"
+            control={control}
+            keyboardType="email-address"
+            error={errors.Name?.message}
+            requiredMessage="Name is required"
+          />
+          <CustomInput
+            label="Email"
+            name="Email"
+            control={control}
+            keyboardType="email-address"
+            error={errors.Email?.message}
+            requiredMessage="Email is required"
+          />
+          <CustomInput
+            label="Confirm Email"
+            name="ConfirmEmail"
+            control={control}
+            keyboardType="email-address"
+            error={errors.ConfirmEmail?.message}
+            requiredMessage="Confirm Email is required"
+          />
+          <CustomInput
+            label="Password"
+            name="Password"
+            control={control}
+            secureTextEntry
+            error={errors.Password?.message}
+            requiredMessage="Password is required"
+          />
+          <CustomInput
+            label="Confirm Password"
+            name="ConfirmPassword"
+            control={control}
+            secureTextEntry
+            error={errors.Password?.message}
+            requiredMessage="Confirm Password is required"
+          />
         </View>
         <View style={style.actionsContainer}>
-          <CustomButton name="Register" />
+          <CustomButton name="Register" onPress={handleSubmit(onSubmit)} />
           <Text style={style.text}>
             Already have an account?{" "}
             <Text onPress={onSignIn} style={{ color: Colors.blue600 }}>
