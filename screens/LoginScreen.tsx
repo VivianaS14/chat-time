@@ -6,7 +6,7 @@ import { Colors } from "../utils/Colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootParamList } from "../types/Navigation";
 import { useForm } from "react-hook-form";
-import { FormValues } from "../types/Login";
+import { FiledValues } from "../types/Login";
 import { validatePassword } from "../utils/fn";
 
 type Props = NativeStackScreenProps<RootParamList, "Login">;
@@ -17,13 +17,13 @@ function LoginScreen({ navigation }: Props) {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<FormValues>({ mode: "onChange" });
+  } = useForm<FiledValues>({ mode: "onChange" });
 
   const onSignUp = () => {
     navigation.navigate("Register");
   };
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: FiledValues) => {
     if (!validatePassword(data.Password)) {
       setError("Password", {
         message:
