@@ -5,12 +5,34 @@ import CustomButton from "../components/ui/CustomButton";
 import { Colors } from "../utils/Colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootParamList } from "../types/Navigation";
+import { useForm } from "react-hook-form";
+import { FormValues } from "../types/Login";
+import { validatePassword } from "../utils/fn";
 
 type Props = NativeStackScreenProps<RootParamList, "Login">;
 
 function LoginScreen({ navigation }: Props) {
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<FormValues>({ mode: "onChange" });
+
   const onSignUp = () => {
     navigation.navigate("Register");
+  };
+
+  const onSubmit = (data: FormValues) => {
+    if (!validatePassword(data.Password)) {
+      setError("Password", {
+        message:
+          "Password must contain at least one number, one uppercase and one lowercase letter",
+      });
+      return;
+    }
+
+    console.log("----------> Submitted Data: ", { data });
   };
 
   return (
@@ -28,11 +50,25 @@ function LoginScreen({ navigation }: Props) {
           <Text style={style.text}>Sign In to your Account</Text>
         </View>
         <View style={style.formContainer}>
-          <CustomInput name="Email" />
-          <CustomInput name="Password" />
+          <CustomInput
+            label="Email"
+            name="Email"
+            control={control}
+            keyboardType="email-address"
+            error={errors.Email?.message}
+            requiredMessage="Email is required"
+          />
+          <CustomInput
+            label="Password"
+            name="Password"
+            control={control}
+            secureTextEntry
+            error={errors.Password?.message}
+            requiredMessage="Password is required"
+          />
         </View>
         <View style={style.actionsContainer}>
-          <CustomButton name="Login" />
+          <CustomButton name="Login" onPress={handleSubmit(onSubmit)} />
           <Text style={style.text}>
             Don't have an account?{" "}
             <Text onPress={onSignUp} style={{ color: Colors.blue600 }}>
