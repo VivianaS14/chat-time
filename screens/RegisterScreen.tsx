@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomInput from "../components/ui/CustomInput";
 import CustomButton from "../components/ui/CustomButton";
@@ -8,6 +8,8 @@ import { RootParamList } from "../types/Navigation";
 import { useForm } from "react-hook-form";
 import { FiledValues } from "../types/Login";
 import { validatePassword } from "../utils/fn";
+import { api, apiUrls } from "../utils/apiUrls";
+import axios from "axios";
 
 type Props = NativeStackScreenProps<RootParamList, "Register">;
 
@@ -23,7 +25,7 @@ function RegisterScreen({ navigation }: Props) {
     navigation.navigate("Login");
   };
 
-  const onSubmit = (data: FiledValues) => {
+  const onSubmit = async (data: FiledValues) => {
     if (data.Email !== data.ConfirmEmail) {
       setError("Email", {
         message: "Your email and confirmation email must match",
@@ -56,7 +58,26 @@ function RegisterScreen({ navigation }: Props) {
       return;
     }
 
-    console.log("----------> Submitted Data: ", { data });
+    // Send a POST request to backend API to register user
+    const user = {
+      name: data.Name,
+      email: data.Email,
+      password: data.Password,
+    };
+
+    api
+      .post(apiUrls.register, user)
+      .then((response) => {
+        Alert.alert(
+          "Registration successful",
+          "You have been registered successfully"
+        );
+        console.log({ response });
+      })
+      .catch((err) => {
+        Alert.alert("Registration failed", "An error occurred");
+        console.log(err);
+      });
   };
 
   return (
