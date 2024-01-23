@@ -39,7 +39,16 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello world!" });
 });
 
-//Endpoint to register an user
+// Function to create token based on user id
+const createToken = (userId) => {
+  const payload = { userId };
+
+  // Generate token with a secret key and expiration time
+  const token = jwt.sign(payload, "Q$r2K6W8n!jCW%Zk", { expiresIn: "1h" });
+  return token;
+};
+
+//Endpoint for register an user
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
 
@@ -59,6 +68,34 @@ app.post("/register", (req, res) => {
     .catch((err) => {
       console.log("Error registering user", err);
       res.status(500).json({ message: "Error registering user" });
+    });
+});
+
+// Endpoint for login
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  // Check if email & password are provided
+  if (!email || !password) {
+    return res.status(404).json({ message: "Email and password are required" });
+  }
+
+  // Check for that user in the database
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) return res.status(404).json({ message: "User not found" });
+
+      // Compare provided password with the password in the db
+      if (user.password !== password) {
+        return res.status(404).json({ message: "Invalid password" });
+      }
+
+      const token = createToken(user._id);
+      res.status(200).json({ token, ...user });
+    })
+    .catch((err) => {
+      console.log("Error finding user", err);
+      res.status(500).json({ message: "Internal Server Error" });
     });
 });
 
