@@ -8,15 +8,15 @@ import {
 } from "react-native";
 import { Colors } from "../../utils/Colors";
 
-interface Props {
+interface Props extends PressableProps {
   name: string;
 }
 
-function CustomButton({ name }: Props) {
+function CustomButton(props: Props) {
   return (
-    <Pressable android_ripple={{ color: Colors.gray }}>
+    <Pressable android_ripple={{ color: Colors.gray }} {...props}>
       <View style={style.buttonContainer}>
-        <Text style={style.text}>{name}</Text>
+        <Text style={style.text}>{props.name}</Text>
       </View>
     </Pressable>
   );
