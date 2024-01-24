@@ -6,6 +6,7 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import { RootParamList } from "./types/Navigation";
 import HomeScreen from "./screens/HomeScreen";
+import { UserProvider } from "./context/user/UserProvider";
 
 const Stack = createNativeStackNavigator<RootParamList>();
 
@@ -26,9 +27,11 @@ function StackNavigator() {
 export default function App() {
   return (
     <>
-      <NavigationContainer>
-        <StackNavigator />
-      </NavigationContainer>
+      <UserProvider>
+        <NavigationContainer>
+          <StackNavigator />
+        </NavigationContainer>
+      </UserProvider>
 
       <StatusBar style="auto" />
     </>
