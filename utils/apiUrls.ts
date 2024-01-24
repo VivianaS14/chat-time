@@ -9,4 +9,5 @@ export const api = axios.create({
 export const apiUrls = {
   register: "/register",
   login: "/login",
+  getUsers: (userId: string) => `/users/${userId}`,
 };

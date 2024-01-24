@@ -99,6 +99,20 @@ app.post("/login", (req, res) => {
     });
 });
 
+// Endpoint to access all users except current logged in
+app.get("/users/:userId", (req, res) => {
+  const loggedInUserId = req.params.userId;
+
+  User.find({ _id: { $ne: loggedInUserId } })
+    .then((users) => {
+      res.status(200).json(users);
+    })
+    .catch((err) => {
+      console.log("Error retrieving users", err);
+      res.status(500).json({ message: "Error retrieving users" });
+    });
+});
+
 // Listen
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);
