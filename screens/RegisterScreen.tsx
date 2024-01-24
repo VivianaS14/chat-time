@@ -71,7 +71,7 @@ function RegisterScreen({ navigation }: Props) {
         "Registration successful",
         "You have been registered successfully"
       );
-      console.log({ response });
+      navigation.navigate("Login");
     } catch (error) {
       Alert.alert("Registration failed", "An error occurred");
       console.log(error);
