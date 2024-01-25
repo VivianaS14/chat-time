@@ -1,16 +1,17 @@
 import React, { useContext } from "react";
 import { Image, StyleSheet, Text, View, Alert } from "react-native";
-import { User } from "../../types/Users";
+import { FriendRequest, User } from "../../types/Users";
 import { Colors } from "../../utils/Colors";
 import CustomButton from "../ui/CustomButton";
 import { UserContext } from "../../context/user/UserContext";
 import { api, apiUrls } from "../../utils/apiUrls";
 
 interface Props {
-  user: User;
+  user: User | FriendRequest;
+  mode: "Add friend" | "Accept friend";
 }
 
-function UserCard({ user }: Props) {
+function UserCard({ user, mode }: Props) {
   const { userId } = useContext(UserContext);
 
   const sentFriendRequest = async () => {
@@ -43,14 +44,26 @@ function UserCard({ user }: Props) {
           />
         </View>
 
-        <View>
-          <Text style={style.name}>{user.name}</Text>
-          <Text style={style.email}>{user.email}</Text>
+        <View style={{ justifyContent: "center" }}>
+          {mode === "Add friend" ? (
+            <>
+              <Text style={style.name}>{user.name}</Text>
+              <Text style={style.email}>{user.email}</Text>
+            </>
+          ) : (
+            <Text style={{ fontWeight: "700" }}>
+              {user.name}sent you a friend request!
+            </Text>
+          )}
         </View>
       </View>
 
       <View>
-        <CustomButton name="Add Friend" onPress={sentFriendRequest} />
+        {mode === "Add friend" ? (
+          <CustomButton name="Add Friend" onPress={sentFriendRequest} />
+        ) : (
+          <CustomButton name="Accept" />
+        )}
       </View>
     </View>
   );
@@ -72,7 +85,7 @@ const style = StyleSheet.create({
 
   cardContent: {
     flexDirection: "row",
-    gap: 20,
+    gap: 10,
   },
 
   image: {
