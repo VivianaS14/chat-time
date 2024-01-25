@@ -32,6 +32,20 @@ function UserCard({ user, mode }: Props) {
     }
   };
 
+  const acceptFriendRequest = async () => {
+    try {
+      const { status } = await api.post(apiUrls.acceptFriendRequest, {
+        senderId: user._id,
+        recipientId: userId,
+      });
+      if (status === 201) {
+        Alert.alert("Request accepted successfully!");
+      }
+    } catch (error) {
+      console.log("Error message ", error);
+    }
+  };
+
   return (
     <View style={style.card}>
       <View style={style.cardContent}>
@@ -52,7 +66,7 @@ function UserCard({ user, mode }: Props) {
             </>
           ) : (
             <Text style={{ fontWeight: "700" }}>
-              {user.name}sent you a friend request!
+              {user.name} sent you a friend request!
             </Text>
           )}
         </View>
@@ -62,7 +76,7 @@ function UserCard({ user, mode }: Props) {
         {mode === "Add friend" ? (
           <CustomButton name="Add Friend" onPress={sentFriendRequest} />
         ) : (
-          <CustomButton name="Accept" />
+          <CustomButton name="Accept" onPress={acceptFriendRequest} />
         )}
       </View>
     </View>

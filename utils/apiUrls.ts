@@ -12,4 +12,5 @@ export const apiUrls = {
   getUsers: (userId: string) => `/users/${userId}`,
   sendFriendRequest: "/friend-request",
   getFriendRequests: (userId: string) => `/friend-request/${userId}`,
+  acceptFriendRequest: "/friend-request/accept",
 };

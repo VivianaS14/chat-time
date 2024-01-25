@@ -151,6 +151,36 @@ app.get("/friend-request/:userId", async (req, res) => {
   }
 });
 
+// Endpoint to accept a friend request
+app.post("/friend-request/accept", async (req, res) => {
+  const { senderId, recipientId } = req.body;
+
+  try {
+    // Retrieve docs of sender and recipient
+    const sender = await User.findById(senderId);
+    const recipient = await User.findById(recipientId);
+
+    sender.friends.push(recipient);
+    const newSentFriendRequest = sender.sentFriendRequest.filter(
+      (ids) => ids._id.toString() !== recipientId
+    );
+    sender.sentFriendRequest = newSentFriendRequest;
+
+    recipient.friends.push(senderId);
+    const newFriendRequest = recipient.friendRequest.filter(
+      (ids) => ids._id.toString() !== senderId
+    );
+    recipient.friendRequest = newFriendRequest;
+
+    await sender.save();
+    await recipient.save();
+
+    res.status(201).json({ message: "Friend request accepted!" });
+  } catch (error) {
+    res.status(500).json({ message: "Error accepting friend request" });
+  }
+});
+
 // Listen
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);
