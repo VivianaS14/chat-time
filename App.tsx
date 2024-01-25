@@ -7,19 +7,25 @@ import RegisterScreen from "./screens/RegisterScreen";
 import { RootParamList } from "./types/Navigation";
 import HomeScreen from "./screens/HomeScreen";
 import { UserProvider } from "./context/user/UserProvider";
+import FriendScreen from "./screens/FriendScreen";
 
 const Stack = createNativeStackNavigator<RootParamList>();
 
 function StackNavigator() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Friends" component={FriendScreen} />
     </Stack.Navigator>
   );
 }
