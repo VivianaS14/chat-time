@@ -134,6 +134,23 @@ app.post("/friend-request", async (req, res) => {
   }
 });
 
+// Endpoint ro show all friend requests
+app.get("/friend-request/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId).populate(
+      "friendRequest",
+      "name email"
+    );
+
+    const friendRequest = user.friendRequest;
+    res.status(200).json(friendRequest);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving friend request" });
+  }
+});
+
 // Listen
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);

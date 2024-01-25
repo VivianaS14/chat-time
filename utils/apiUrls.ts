@@ -11,4 +11,5 @@ export const apiUrls = {
   login: "/login",
   getUsers: (userId: string) => `/users/${userId}`,
   sendFriendRequest: "/friend-request",
+  getFriendRequests: (userId: string) => `/friend-request/${userId}`,
 };

@@ -8,3 +8,9 @@ export type User = {
   password: string;
   sentFriendRequest: any[];
 };
+
+export type FriendRequest = {
+  _id: string;
+  email: string;
+  name: string;
+};
