@@ -1,4 +1,11 @@
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomInput from "../components/ui/CustomInput";
 import CustomButton from "../components/ui/CustomButton";
@@ -9,7 +16,6 @@ import { useForm } from "react-hook-form";
 import { FiledValues } from "../types/Login";
 import { validatePassword } from "../utils/fn";
 import { api, apiUrls } from "../utils/apiUrls";
-import axios from "axios";
 
 type Props = NativeStackScreenProps<RootParamList, "Register">;
 
@@ -66,7 +72,7 @@ function RegisterScreen({ navigation }: Props) {
     };
 
     try {
-      const response = await api.post(apiUrls.register, user);
+      await api.post(apiUrls.register, user);
       Alert.alert(
         "Registration successful",
         "You have been registered successfully"
@@ -81,68 +87,70 @@ function RegisterScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={style.mainContainer}>
       <View style={style.innerContainer}>
-        <View style={style.textContainer}>
-          <Text
-            style={[
-              style.text,
-              { fontSize: 20, fontWeight: "700", color: Colors.blue600 },
-            ]}
-          >
-            Register
-          </Text>
-          <Text style={style.text}>Register to your Account</Text>
-        </View>
-        <View style={style.formContainer}>
-          <CustomInput
-            label="Name"
-            name="Name"
-            control={control}
-            keyboardType="email-address"
-            error={errors.Name?.message}
-            requiredMessage="Name is required"
-          />
-          <CustomInput
-            label="Email"
-            name="Email"
-            control={control}
-            keyboardType="email-address"
-            error={errors.Email?.message}
-            requiredMessage="Email is required"
-          />
-          <CustomInput
-            label="Confirm Email"
-            name="ConfirmEmail"
-            control={control}
-            keyboardType="email-address"
-            error={errors.ConfirmEmail?.message}
-            requiredMessage="Confirm Email is required"
-          />
-          <CustomInput
-            label="Password"
-            name="Password"
-            control={control}
-            secureTextEntry
-            error={errors.Password?.message}
-            requiredMessage="Password is required"
-          />
-          <CustomInput
-            label="Confirm Password"
-            name="ConfirmPassword"
-            control={control}
-            secureTextEntry
-            error={errors.Password?.message}
-            requiredMessage="Confirm Password is required"
-          />
-        </View>
-        <View style={style.actionsContainer}>
-          <CustomButton name="Register" onPress={handleSubmit(onSubmit)} />
-          <Text style={style.text}>
-            Already have an account?{" "}
-            <Text onPress={onSignIn} style={{ color: Colors.blue600 }}>
-              Sign In
+        <ScrollView>
+          <View style={style.textContainer}>
+            <Text
+              style={[
+                style.text,
+                { fontSize: 20, fontWeight: "700", color: Colors.blue600 },
+              ]}
+            >
+              Register
             </Text>
-          </Text>
-        </View>
+            <Text style={style.text}>Register to your Account</Text>
+          </View>
+          <View style={style.formContainer}>
+            <CustomInput
+              label="Name"
+              name="Name"
+              control={control}
+              keyboardType="email-address"
+              error={errors.Name?.message}
+              requiredMessage="Name is required"
+            />
+            <CustomInput
+              label="Email"
+              name="Email"
+              control={control}
+              keyboardType="email-address"
+              error={errors.Email?.message}
+              requiredMessage="Email is required"
+            />
+            <CustomInput
+              label="Confirm Email"
+              name="ConfirmEmail"
+              control={control}
+              keyboardType="email-address"
+              error={errors.ConfirmEmail?.message}
+              requiredMessage="Confirm Email is required"
+            />
+            <CustomInput
+              label="Password"
+              name="Password"
+              control={control}
+              secureTextEntry
+              error={errors.Password?.message}
+              requiredMessage="Password is required"
+            />
+            <CustomInput
+              label="Confirm Password"
+              name="ConfirmPassword"
+              control={control}
+              secureTextEntry
+              error={errors.Password?.message}
+              requiredMessage="Confirm Password is required"
+            />
+          </View>
+          <View style={style.actionsContainer}>
+            <CustomButton name="Register" onPress={handleSubmit(onSubmit)} />
+            <Text style={style.text}>
+              Already have an account?{" "}
+              <Text onPress={onSignIn} style={{ color: Colors.blue600 }}>
+                Sign In
+              </Text>
+            </Text>
+          </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -176,5 +184,10 @@ const style = StyleSheet.create({
 
   actionsContainer: {
     gap: 15,
+  },
+
+  pictureContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
