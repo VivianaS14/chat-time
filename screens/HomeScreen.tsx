@@ -29,6 +29,15 @@ function HomeScreen({ navigation }: Props) {
 
   const [users, setUsers] = useState<User[]>([]);
 
+  const handleFriends = () => {
+    navigation.navigate("Friends");
+  };
+
+  const logOut = () => {
+    AsyncStorage.setItem("authToken", "");
+    navigation.navigate("Login");
+  };
+
   useEffect(() => {
     const fetchUsers = async () => {
       let token;
@@ -57,12 +66,22 @@ function HomeScreen({ navigation }: Props) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "",
-      headerShown: true,
       headerLeft: () => <Text style={style.headerTitle}>Chat Time</Text>,
       headerRight: () => (
         <View style={style.iconsContainer}>
-          <Ionicons name="chatbubbles-outline" size={24} color="black" />
-          <Ionicons name="people-outline" size={24} color="black" />
+          <Ionicons
+            name="people-outline"
+            size={26}
+            color="black"
+            onPress={handleFriends}
+          />
+          <Ionicons name="chatbubbles-outline" size={26} color="black" />
+          <Ionicons
+            name="log-out-outline"
+            size={26}
+            color="black"
+            onPress={logOut}
+          />
         </View>
       ),
     });
@@ -75,7 +94,7 @@ function HomeScreen({ navigation }: Props) {
         <FlatList
           data={users}
           renderItem={({ item }: ListRenderItemInfo<User>) => (
-            <UserCard user={item} />
+            <UserCard user={item} mode="Add friend" />
           )}
           keyExtractor={(item) => item._id}
         />
@@ -90,7 +109,7 @@ const style = StyleSheet.create({
   iconsContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 15,
+    gap: 20,
   },
 
   headerTitle: {
