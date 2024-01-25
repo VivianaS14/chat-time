@@ -113,6 +113,27 @@ app.get("/users/:userId", (req, res) => {
     });
 });
 
+// Endpoint to send a request to a user
+app.post("/friend-request", async (req, res) => {
+  const { currentUserId, selectedUserId } = req.body;
+
+  try {
+    // Update the recipient's friend request array
+    await User.findByIdAndUpdate(selectedUserId, {
+      $push: { friendRequest: currentUserId },
+    });
+
+    // Update the sender's sent friend request
+    await User.findByIdAndUpdate(currentUserId, {
+      $push: { sentFriendRequest: selectedUserId },
+    });
+
+    res.status(201).json({ message: "Friend request sent" });
+  } catch (error) {
+    res.status(500).json({ message: "Error sending request" });
+  }
+});
+
 // Listen
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);
