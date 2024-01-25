@@ -1,6 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  ListRenderItemInfo,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { RootParamList } from "../types/Navigation";
 import { Ionicons } from "@expo/vector-icons";
 import { UserContext } from "../context/user/UserContext";
@@ -9,6 +15,7 @@ import { jwtDecode, JwtPayload } from "jwt-decode";
 import { decode } from "base-64";
 import { api, apiUrls } from "../utils/apiUrls";
 import { User } from "../types/Users";
+import UserCard from "../components/user/UserCard";
 global.atob = decode;
 
 interface JwtDecodePayload extends JwtPayload {
@@ -18,7 +25,7 @@ interface JwtDecodePayload extends JwtPayload {
 type Props = NativeStackScreenProps<RootParamList, "Home">;
 
 function HomeScreen({ navigation }: Props) {
-  const { userId, setUserId } = useContext(UserContext);
+  const { setUserId } = useContext(UserContext);
 
   const [users, setUsers] = useState<User[]>([]);
 
@@ -64,6 +71,15 @@ function HomeScreen({ navigation }: Props) {
   return (
     <View>
       <Text>Home Screen</Text>
+      <View>
+        <FlatList
+          data={users}
+          renderItem={({ item }: ListRenderItemInfo<User>) => (
+            <UserCard user={item} />
+          )}
+          keyExtractor={(item) => item._id}
+        />
+      </View>
     </View>
   );
 }
