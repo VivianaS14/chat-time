@@ -52,22 +52,22 @@ function LoginScreen({ navigation }: Props) {
     }
   };
 
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken");
+  // useEffect(() => {
+  //   const checkLoginStatus = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem("authToken");
 
-        if (token) {
-          navigation.replace("Home");
-          return;
-        }
-      } catch (error) {
-        console.log("Error", error);
-      }
-    };
+  //       if (token) {
+  //         navigation.replace("Home");
+  //         return;
+  //       }
+  //     } catch (error) {
+  //       console.log("Error", error);
+  //     }
+  //   };
 
-    checkLoginStatus();
-  }, []);
+  //   checkLoginStatus();
+  // }, []);
 
   return (
     <SafeAreaView style={style.mainContainer}>
