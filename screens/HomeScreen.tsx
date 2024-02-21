@@ -1,5 +1,6 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   FlatList,
   ListRenderItemInfo,
@@ -7,15 +8,19 @@ import {
   Text,
   View,
 } from "react-native";
-import { RootParamList } from "../types/Navigation";
+
 import { Ionicons } from "@expo/vector-icons";
+import UserCard from "../components/user/UserCard";
+
+import { RootParamList } from "../types/Navigation";
 import { UserContext } from "../context/user/UserContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { decode } from "base-64";
+
 import { api, apiUrls } from "../utils/apiUrls";
 import { User } from "../types/Users";
-import UserCard from "../components/user/UserCard";
+
 global.atob = decode;
 
 interface JwtDecodePayload extends JwtPayload {

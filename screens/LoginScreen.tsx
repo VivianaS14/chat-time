@@ -1,16 +1,18 @@
+import React from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useForm } from "react-hook-form";
+
 import CustomInput from "../components/ui/CustomInput";
 import CustomButton from "../components/ui/CustomButton";
+
 import { Colors } from "../utils/Colors";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootParamList } from "../types/Navigation";
-import { useForm } from "react-hook-form";
-import { FiledValues } from "../types/Login";
 import { validatePassword } from "../utils/fn";
 import { api, apiUrls } from "../utils/apiUrls";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect } from "react";
+import { RootParamList } from "../types/Navigation";
+import { FiledValues } from "../types/Login";
 
 type Props = NativeStackScreenProps<RootParamList, "Login">;
 

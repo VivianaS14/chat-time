@@ -6,10 +6,11 @@ import {
   Text,
   View,
 } from "react-native";
-import { api, apiUrls } from "../utils/apiUrls";
-import { UserContext } from "../context/user/UserContext";
-import { FriendRequest } from "../types/Users";
+
 import UserCard from "../components/user/UserCard";
+import { UserContext } from "../context/user/UserContext";
+import { api, apiUrls } from "../utils/apiUrls";
+import { FriendRequest } from "../types/Users";
 
 function FriendScreen() {
   const { userId } = useContext(UserContext);
