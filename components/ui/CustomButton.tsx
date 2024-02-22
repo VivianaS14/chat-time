@@ -10,12 +10,18 @@ import { Colors } from "../../utils/Colors";
 
 interface Props extends PressableProps {
   name: string;
+  color?: string;
 }
 
 function CustomButton(props: Props) {
   return (
     <Pressable android_ripple={{ color: Colors.gray }} {...props}>
-      <View style={style.buttonContainer}>
+      <View
+        style={[
+          style.buttonContainer,
+          { backgroundColor: props.color ?? Colors.blue600 },
+        ]}
+      >
         <Text style={style.text}>{props.name}</Text>
       </View>
     </Pressable>
