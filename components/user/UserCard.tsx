@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View, Alert } from "react-native";
 import { FriendRequest, User } from "../../types/Users";
 import { Colors } from "../../utils/Colors";
@@ -7,12 +7,14 @@ import { UserContext } from "../../context/user/UserContext";
 import { api, apiUrls } from "../../utils/apiUrls";
 
 interface Props {
-  user: User | FriendRequest;
-  mode: "Add friend" | "Accept friend";
+  user: User;
 }
 
-function UserCard({ user, mode }: Props) {
+function UserCard({ user }: Props) {
   const { userId } = useContext(UserContext);
+  const [textButton, setTextButton] = useState<"Add Friend" | "Sent">(
+    "Add Friend"
+  );
 
   const sentFriendRequest = async () => {
     try {
@@ -25,6 +27,7 @@ function UserCard({ user, mode }: Props) {
           "Request sent successfully",
           "Hope you get a response soon!"
         );
+        setTextButton("Sent");
       }
     } catch (error) {
       console.log("Error message ", error);
@@ -32,19 +35,16 @@ function UserCard({ user, mode }: Props) {
     }
   };
 
-  const acceptFriendRequest = async () => {
-    try {
-      const { status } = await api.post(apiUrls.acceptFriendRequest, {
-        senderId: user._id,
-        recipientId: userId,
-      });
-      if (status === 201) {
-        Alert.alert("Request accepted successfully!");
+  useEffect(() => {
+    const validateFriendsRequest = () => {
+      if (user.sentFriendRequest.includes(userId)) {
+        setTextButton("Sent");
+        return;
       }
-    } catch (error) {
-      console.log("Error message ", error);
-    }
-  };
+    };
+
+    validateFriendsRequest();
+  }, []);
 
   return (
     <View style={style.card}>
@@ -59,25 +59,19 @@ function UserCard({ user, mode }: Props) {
         </View>
 
         <View style={{ justifyContent: "center" }}>
-          {mode === "Add friend" ? (
-            <>
-              <Text style={style.name}>{user.name}</Text>
-              <Text style={style.email}>{user.email}</Text>
-            </>
-          ) : (
-            <Text style={{ fontWeight: "700" }}>
-              {user.name} sent you a friend request!
-            </Text>
-          )}
+          <Text style={style.name}>{user.name}</Text>
+          <Text style={style.email}>{user.email}</Text>
         </View>
       </View>
 
-      <View>
-        {mode === "Add friend" ? (
-          <CustomButton name="Add Friend" onPress={sentFriendRequest} />
-        ) : (
-          <CustomButton name="Accept" onPress={acceptFriendRequest} />
-        )}
+      <View style={{ alignItems: "center", width: "30%" }}>
+        <CustomButton
+          name={textButton}
+          onPress={sentFriendRequest}
+          disabled={textButton === "Sent"}
+          color={textButton === "Sent" ? Colors.blue400 : Colors.blue600}
+          style={{ width: "100%" }}
+        />
       </View>
     </View>
   );
