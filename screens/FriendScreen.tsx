@@ -11,6 +11,7 @@ import UserCard from "../components/user/UserCard";
 import { UserContext } from "../context/user/UserContext";
 import { api, apiUrls } from "../utils/apiUrls";
 import { FriendRequest } from "../types/Users";
+import FriendCard from "../components/user/FriendCard";
 
 function FriendScreen() {
   const { userId } = useContext(UserContext);
@@ -46,7 +47,7 @@ function FriendScreen() {
         <FlatList
           data={friendRequests}
           renderItem={({ item }: ListRenderItemInfo<FriendRequest>) => (
-            <UserCard user={item} mode="Accept friend" />
+            <FriendCard user={item} />
           )}
           keyExtractor={(item) => item._id}
         />
