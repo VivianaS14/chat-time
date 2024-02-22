@@ -45,12 +45,12 @@ function LoginScreen({ navigation }: Props) {
     try {
       const { data } = await api.post(apiUrls.login, user);
       const token = data.token;
-
       AsyncStorage.setItem("authToken", token);
-      navigation.replace("Home");
     } catch (error) {
       Alert.alert("Login failed", "Email or Password invalid");
-      console.log(error);
+      console.error(error);
+    } finally {
+      navigation.replace("Home");
     }
   };
 

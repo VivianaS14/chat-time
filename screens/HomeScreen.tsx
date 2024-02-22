@@ -31,7 +31,6 @@ type Props = NativeStackScreenProps<RootParamList, "Home">;
 
 function HomeScreen({ navigation }: Props) {
   const { setUserId } = useContext(UserContext);
-
   const [users, setUsers] = useState<User[]>([]);
 
   const handleFriends = () => {
@@ -94,12 +93,14 @@ function HomeScreen({ navigation }: Props) {
 
   return (
     <View>
-      <Text>Home Screen</Text>
+      <View>
+        <Text style={style.title}>Available Users</Text>
+      </View>
       <View>
         <FlatList
           data={users}
           renderItem={({ item }: ListRenderItemInfo<User>) => (
-            <UserCard user={item} mode="Add friend" />
+            <UserCard user={item} />
           )}
           keyExtractor={(item) => item._id}
         />
@@ -120,5 +121,12 @@ const style = StyleSheet.create({
   headerTitle: {
     fontSize: 16,
     fontWeight: "700",
+  },
+
+  title: {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "800",
+    marginVertical: 10,
   },
 });

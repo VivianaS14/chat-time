@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://192.168.10.21:8000";
+// Revisar IP del local para correr la base de datos
+const API_URL = "http://192.168.10.11:8000";
 
 export const api = axios.create({
   baseURL: API_URL,
